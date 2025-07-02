@@ -36,7 +36,6 @@ class FitnessCalculatorBestReturnAndMinorVolatility(FitnessCalculator):
                 asset_individual: AssetIndividual,
                 df: DataFrame,
                 risk_free_rate_monthly=risk_free_rate_monthly_standard) -> AssetIndividual:
-
         weights = np.array([asset_individual.assets.get(asset, 0) for asset in self.asset_order])
         portfolio_return_monthly = np.dot(self.returns_mean, weights)
 

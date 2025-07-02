@@ -20,7 +20,7 @@ class GeneticAlgorithmFlow:
         self.completion_checker = completion_checker
 
     def run(self):
-        df = collect_prices()
+        df = collect_prices().dropna()
         population = self.population_generator.initial(df)
         self.fitness_calculator.initialize(df)
         counter = 0

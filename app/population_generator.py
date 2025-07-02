@@ -1,5 +1,6 @@
 import random
 from abc import abstractmethod
+from copy import deepcopy
 from typing import List
 
 import pandas as pd
@@ -9,6 +10,7 @@ from app.domains.individual import AssetIndividual
 
 import numpy as np
 import copy
+import math
 
 # Regras:
 # - Todos os ativos devem estar presentes na carteira.
@@ -67,7 +69,7 @@ def calculate_best_returns(df: DataFrame) -> AssetIndividual:
                 break
 
     individual = AssetIndividual(assets=weights)
-    individual.adjust_weights()
+    individual.adjust_weights(MIN_PERCENTAGE, MAX_PERCENTAGE)
     return individual
 
 
@@ -100,7 +102,7 @@ def calculate_minor_volatility(df: DataFrame) -> AssetIndividual:
                 break
 
     individual = AssetIndividual(assets=weights)
-    individual.adjust_weights()
+    individual.adjust_weights(MIN_PERCENTAGE, MAX_PERCENTAGE)
     return individual
 
 
@@ -117,18 +119,8 @@ def generate_random(df: DataFrame, size) -> List[AssetIndividual]:
             individual[col] = weight
             assets_pending -= 1
 
-        if residual_weight > 0.0:
-            sorted_assets = sorted(individual.items(), key=lambda item: item[1])
-            for asset in sorted_assets:
-                new_weight = residual_weight + asset[1]
-                residual = new_weight - MAX_PERCENTAGE
-                individual[asset[0]] = min(MAX_PERCENTAGE, new_weight)
-                residual_weight = residual
-                if residual_weight <= 0.0:
-                    break
-
         asset_individual = AssetIndividual(assets=individual)
-        asset_individual.adjust_weights()
+        asset_individual.adjust_weights(MIN_PERCENTAGE, MAX_PERCENTAGE)
         all_individuals.append(asset_individual)
 
     return all_individuals
@@ -158,24 +150,10 @@ def exchange_asset(asset, parent1, parent2):
     child2.assets[asset] = w1
     child1.fitness = 0
     child2.fitness = 0
-    adjust_weights(child1)
-    adjust_weights(child2)
+
+    child1.adjust_weights(MIN_PERCENTAGE, MAX_PERCENTAGE)
+    child2.adjust_weights(MIN_PERCENTAGE, MAX_PERCENTAGE)
     return child1, child2
-
-
-def adjust_weights(child: AssetIndividual):
-    residual_weight = 1 - child.total_weight()
-    sorted_assets = sorted(child.assets.items(), key=lambda item: item[1]) if residual_weight > 0 else sorted(
-        child.assets.items(), key=lambda item: item[1], reverse=True)
-
-    for asset in sorted_assets:
-        new_weight = residual_weight + asset[1]
-        child.assets[asset[0]] = min(MAX_PERCENTAGE, max(new_weight, MIN_PERCENTAGE))
-        residual_weight = 1 - child.total_weight()
-        if residual_weight == 0.0:
-            break
-
-    child.adjust_weights()
 
 
 def apply_mutation(individual: AssetIndividual):
@@ -186,13 +164,23 @@ def apply_mutation(individual: AssetIndividual):
                 weight = individual.assets[asset] + mutation_rate
                 individual.assets[asset] = weight
 
-            adjust_weights(individual)
+            individual.adjust_weights(MIN_PERCENTAGE, MAX_PERCENTAGE)
 
 
 def select_by_tournament(population: List[AssetIndividual], k: int = 5) -> AssetIndividual:
     tournament_contenders = random.sample(population, k)
     winner = max(tournament_contenders, key=lambda individual: individual.fitness)
     return winner
+
+
+def check(individual: AssetIndividual):
+    for asset in individual.assets:
+        w = individual.assets[asset]
+        if w < MIN_PERCENTAGE or w > MAX_PERCENTAGE or math.isnan(w):
+            print("ACHEI w < MIN_PERCENTAGE or w > MAX_PERCENTAGE or math.isnan(w)")
+
+    if abs(1 - individual.total_weight()) > 0.0001:
+        print(" individual.total_weight() != 1")
 
 
 class PopulationGeneratorWithHotStart(PopulationGenerator):
@@ -218,5 +206,7 @@ class PopulationGeneratorWithHotStart(PopulationGenerator):
             new_population.append(new_individual_1)
             new_population.append(new_individual_2)
 
+            check(new_individual_1)
+            check(new_individual_2)
 
         return new_population
