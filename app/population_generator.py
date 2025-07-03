@@ -14,8 +14,8 @@ import math
 
 # Regras:
 # - Todos os ativos devem estar presentes na carteira.
-# - Cada ativo deve ter no minimo 5%.
-# - Um Ativo deve ter no maximo 45%.
+# - Cada ativo deve ter no minimo 2%.
+# - Um Ativo deve ter no maximo 50%.
 
 POPULATION_SIZE = 350
 

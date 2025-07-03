@@ -1,27 +1,29 @@
+from pandas.core.interchange.dataframe_protocol import DataFrame
+
 from app.completion_checker import CompletionChecker
 from app.domains.individual import AssetIndividual
+from app.event import Event
 from app.fitness_calculator import FitnessCalculator
 from app.population_generator import PopulationGenerator
 from typing import List
-from app.collect_prices import collect_prices
-
 
 def sort_population(individual_fitness: List[AssetIndividual]) -> List[AssetIndividual]:
     return sorted(individual_fitness, key=lambda individual: individual.fitness, reverse=True)
 
 class GeneticAlgorithmFlow:
+
     def __init__(self,
                  population_generator: PopulationGenerator,
                  fitness_calculator: FitnessCalculator,
-                 completion_checker: CompletionChecker):
+                 completion_checker: CompletionChecker,
+                 event: Event):
         self.population_generator = population_generator
         self.fitness_calculator = fitness_calculator
         self.completion_checker = completion_checker
+        self.event = event
 
-    def run(self):
-        df = collect_prices().dropna()
+    def run(self, df: DataFrame) -> AssetIndividual:
         population = self.population_generator.initial(df)
-        self.fitness_calculator.initialize(df)
         counter = 0
         best_fitness = 0.0
         best_individual = None
@@ -40,4 +42,7 @@ class GeneticAlgorithmFlow:
             if counter % 10 == 0:
                 print(f'Round: {counter}')
 
+            self.event.on_change_generation(counter, best_individual)
+
         print(f'FINAL RESULT: best_fitness: {best_fitness} best_individual: {best_individual.assets}')
+        return best_individual

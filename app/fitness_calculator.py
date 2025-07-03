@@ -1,13 +1,10 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from pandas import DataFrame
 
 from app.domains.individual import AssetIndividual
 import numpy as np
 
 RISK_FREE_RATE_ANNUAL = 0.045
-risk_free_rate_monthly_standard = RISK_FREE_RATE_ANNUAL / 12.0
-HIGH_VOLATILITY_PENALTY_RATE = 1.1
-
 
 class FitnessCalculator:
 
@@ -19,36 +16,37 @@ class FitnessCalculator:
     def execute(self, asset_individual: AssetIndividual, df: DataFrame) -> AssetIndividual:
         pass
 
-
 class FitnessCalculatorBestReturnAndMinorVolatility(FitnessCalculator):
 
-    def __init__(self):
-        self.asset_order = None
-        self.returns = None
-        self.returns_mean = None
-
-    def initialize(self, df: DataFrame):
+    def __init__(self, df: DataFrame):
         self.returns = df.pct_change().dropna()
         self.asset_order = df.columns
-        self.returns_mean = self.returns.mean()
+        self.total_returns_mean = self.returns.mean()
+        self.cov_matrix_monthly = self.returns.cov()
 
     def execute(self,
                 asset_individual: AssetIndividual,
                 df: DataFrame,
-                risk_free_rate_monthly=risk_free_rate_monthly_standard) -> AssetIndividual:
+                risk_free_rate=RISK_FREE_RATE_ANNUAL) -> AssetIndividual:
 
-        weights = np.array([asset_individual.assets.get(asset, 0) for asset in self.asset_order])
-        portfolio_return_monthly = np.dot(self.returns_mean, weights)
+        portfolio_return, weights = self.calculate_return_monthly(asset_individual)
+        portfolio_volatility = self.calcula_volatility_monthly(weights)
 
-        cov_matrix_monthly = self.returns.cov()
+        portfolio_return_annual = portfolio_return * 12
+        portfolio_volatility_annual = portfolio_volatility * np.sqrt(12)
 
-        portfolio_volatility_monthly = np.sqrt(np.dot(weights.T, np.dot(cov_matrix_monthly, weights)))
-
-        if portfolio_volatility_monthly == 0:
-            sharpe_ratio_monthly = 0.0
+        if portfolio_volatility == 0:
+            sharpe_ratio = 0.0
         else:
-            sharpe_ratio_monthly = (portfolio_return_monthly - risk_free_rate_monthly) / portfolio_volatility_monthly ** HIGH_VOLATILITY_PENALTY_RATE
+            sharpe_ratio = (portfolio_return_annual - risk_free_rate) / portfolio_volatility_annual
 
-        fitness = sharpe_ratio_monthly
+        return AssetIndividual(assets=asset_individual.assets, fitness=sharpe_ratio)
 
-        return AssetIndividual(assets=asset_individual.assets, fitness=fitness)
+    def calcula_volatility_monthly(self, weights):
+        portfolio_volatility_monthly = np.sqrt(np.dot(weights.T, np.dot(self.cov_matrix_monthly, weights)))
+        return portfolio_volatility_monthly
+
+    def calculate_return_monthly(self, asset_individual: AssetIndividual):
+        weights = np.array([asset_individual.assets.get(asset, 0) for asset in self.asset_order])
+        portfolio_return_monthly = np.dot(self.total_returns_mean, weights)
+        return portfolio_return_monthly, weights
