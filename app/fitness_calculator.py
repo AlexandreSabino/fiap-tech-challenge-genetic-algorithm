@@ -6,7 +6,7 @@ import numpy as np
 
 RISK_FREE_RATE_ANNUAL = 0.045
 risk_free_rate_monthly_standard = RISK_FREE_RATE_ANNUAL / 12.0
-HIGH_VOLATILITY_PENALTY_RATE = 1.2
+HIGH_VOLATILITY_PENALTY_RATE = 1.1
 
 
 class FitnessCalculator:

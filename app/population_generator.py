@@ -17,11 +17,10 @@ import math
 # - Cada ativo deve ter no minimo 5%.
 # - Um Ativo deve ter no maximo 45%.
 
-POPULATION_SIZE = 500
+POPULATION_SIZE = 350
 
-# MIN_PERCENTAGE = 0.05
 MIN_PERCENTAGE = 0.02
-MAX_PERCENTAGE = 0.45
+MAX_PERCENTAGE = 0.50
 
 MUTATION_RATE = 0.1
 MUTATION_INTENSITY = 0.05

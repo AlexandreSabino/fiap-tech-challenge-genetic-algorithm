@@ -32,9 +32,10 @@ class AssetIndividual:
                 break
             assets_pending = assets_pending - 1
 
-        for asset in shuffle_assets:
-            new_weight = residual_weight + self.assets[asset]
-            self.assets[asset] = min(max_percentage, max(new_weight, min_percentage))
-            residual_weight = 1 - self.total_weight()
-            if residual_weight == 0.0:
-                break
+        if residual_weight != 0.0:
+            for asset in shuffle_assets:
+                new_weight = residual_weight + self.assets[asset]
+                self.assets[asset] = min(max_percentage, max(new_weight, min_percentage))
+                residual_weight = 1 - self.total_weight()
+                if residual_weight == 0.0:
+                    break
