@@ -9,7 +9,6 @@ from app.collect_prices import collect_prices
 def sort_population(individual_fitness: List[AssetIndividual]) -> List[AssetIndividual]:
     return sorted(individual_fitness, key=lambda individual: individual.fitness, reverse=True)
 
-
 class GeneticAlgorithmFlow:
     def __init__(self,
                  population_generator: PopulationGenerator,

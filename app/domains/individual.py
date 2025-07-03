@@ -1,3 +1,5 @@
+import random
+
 class AssetIndividual:
 
     def __init__(self, assets=None, fitness=0.0):
@@ -16,12 +18,23 @@ class AssetIndividual:
                 self.assets[asset] = max_percentage
 
         residual_weight = 1 - self.total_weight()
-        sorted_assets = sorted(self.assets.items(), key=lambda item: item[1]) if residual_weight > 0 else sorted(
-            self.assets.items(), key=lambda item: item[1], reverse=True)
 
-        for asset in sorted_assets:
-            new_weight = residual_weight + asset[1]
-            self.assets[asset[0]] = min(max_percentage, max(new_weight, min_percentage))
+        shuffle_assets = list(self.assets.keys())
+        random.shuffle(shuffle_assets)
+
+        assets_pending = len(shuffle_assets)
+        for asset in shuffle_assets:
+            unit_residual = residual_weight / assets_pending
+            new_weight = unit_residual + self.assets[asset]
+            self.assets[asset] = min(max_percentage, max(new_weight, min_percentage))
+            residual_weight = 1 - self.total_weight()
+            if residual_weight == 0.0:
+                break
+            assets_pending = assets_pending - 1
+
+        for asset in shuffle_assets:
+            new_weight = residual_weight + self.assets[asset]
+            self.assets[asset] = min(max_percentage, max(new_weight, min_percentage))
             residual_weight = 1 - self.total_weight()
             if residual_weight == 0.0:
                 break

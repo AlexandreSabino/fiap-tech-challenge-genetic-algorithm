@@ -17,14 +17,14 @@ import math
 # - Cada ativo deve ter no minimo 5%.
 # - Um Ativo deve ter no maximo 45%.
 
-POPULATION_SIZE = 100
+POPULATION_SIZE = 500
 
-MIN_PERCENTAGE = 0.05
+# MIN_PERCENTAGE = 0.05
+MIN_PERCENTAGE = 0.02
 MAX_PERCENTAGE = 0.45
 
 MUTATION_RATE = 0.1
 MUTATION_INTENSITY = 0.05
-
 
 class PopulationGenerator:
 
@@ -109,15 +109,10 @@ def calculate_minor_volatility(df: DataFrame) -> AssetIndividual:
 def generate_random(df: DataFrame, size) -> List[AssetIndividual]:
     all_individuals: List[AssetIndividual] = []
     for i in range(size):
-        residual_weight = 1.0
         individual = {}
-        assets_pending = len(df.columns)
         for col in df.columns:
-            max_value = min(MAX_PERCENTAGE, residual_weight / assets_pending)
-            weight = np.random.uniform(low=MIN_PERCENTAGE, high=max_value, size=1)[0]
-            residual_weight -= weight
+            weight = np.random.uniform(low=MIN_PERCENTAGE, high=MAX_PERCENTAGE, size=1)[0]
             individual[col] = weight
-            assets_pending -= 1
 
         asset_individual = AssetIndividual(assets=individual)
         asset_individual.adjust_weights(MIN_PERCENTAGE, MAX_PERCENTAGE)
@@ -128,9 +123,8 @@ def generate_random(df: DataFrame, size) -> List[AssetIndividual]:
 
 def apply_crossover(parent1: AssetIndividual, parent2: AssetIndividual):
     all_assets = list(parent1.assets.keys())
-    assets_to_exchange = random.randint(1, len(all_assets))
-    # assets = random.choices(all_assets, k=assets_to_exchange)
-    assets = random.choices(all_assets, k=2)
+    assets_to_exchange = random.randint(1, len(all_assets) - 1)
+    assets = random.sample(all_assets, k=assets_to_exchange)
 
     child1 = copy.deepcopy(parent1)
     child2 = copy.deepcopy(parent2)
