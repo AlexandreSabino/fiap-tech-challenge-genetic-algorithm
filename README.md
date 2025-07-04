@@ -41,7 +41,7 @@ indivíduos foram gerados de maneira aleatória.
 
 - <b>Função de parada:</b> O algoritimo para após atingir X gerações.
 
-- <b>Cáculo do fitness:</b> o fitness é o indice de SHARPE.
+- <b>Cáculo do fitness:</b> o fitness é o indice de SHARPE. </br>
 Índice de Sharpe = (Retorno do Investimento - Taxa Livre de Risco) / Desvio Padrão de volatilidade
 
 - <b>Seleção:</b> A função seleciona aleátoriamente 5 indíviduos e faz uma disputa entre eles,
