@@ -36,7 +36,7 @@ Restrições:
 cotação do dolar.
 
 - <b>Geração da população inicial:</b> Como estratégia de hot start, foi adicionado a população inicial
-a carteira maior retorno possivel e a carteira com a menor volatilidade, os demais 
+a carteira o maior retorno possivel e a carteira com a menor volatilidade, os demais 
 indivíduos foram gerados de maneira aleatória.
 
 - <b>Função de parada:</b> O algoritimo para após atingir X gerações.
