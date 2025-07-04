@@ -20,15 +20,15 @@ Restrições:
 - Cada ativo deve ter no máximo 50% de representatividade (peso) na carteira.
 - Todo o cálculo deve ser feito em dolares, os ativos brasileiros devem ser convertidos para dolares.
 - Serão utilizados apenas os seguintes ativos:
-  1. BOVA11.SA - ETF que representa o índice das maiores empresas do Brasil.
-  2. SMAL11.SA - ETF que representa o índice das empresas com menor valor de mercado do Brasil.
-  3. XFIX11.SA - ETF que representa o índice de fundos imobiliários. 
-  4. IMAB11.SA - ETF de renda fixa brasileiro.
-  5. IVV - ETF que representa o índice das 500 maiores empresas dos EUA.
-  6. IAU - ETF de ouro.
-  7. TLT - ETF de titulos de 10 anos do governo americano. 
-  8. BIL - ETF de titulos de 3 anos do governo americano.
-  9. BTC-USD - Maior criptomoeda do mundo.
+  - BOVA11.SA - ETF que representa o índice das maiores empresas do Brasil.
+  - SMAL11.SA - ETF que representa o índice das empresas com menor valor de mercado do Brasil.
+  - XFIX11.SA - ETF que representa o índice de fundos imobiliários. 
+  - IMAB11.SA - ETF de renda fixa brasileiro.
+  - IVV - ETF que representa o índice das 500 maiores empresas dos EUA.
+  - IAU - ETF de ouro.
+  - TLT - ETF de titulos de 10 anos do governo americano. 
+  - BIL - ETF de titulos de 3 anos do governo americano.
+     BTC-USD - Maior criptomoeda do mundo.
 
 ## Estratégias:
 
@@ -49,10 +49,10 @@ o maior fitness é escolhido, esse processo é executado para 2x para selecionar
 Também é adicionado na lista o melhor indíviduo da geração anterior (elitismo).
 
 - <b>Crossover:</b> A função segue os seguintes passos: </br>
-  1. Sorteia aleátoriamente um determinado numero de ativos.
-  2. Sorteia aleátoriamente os ativos dentro da carteira.
-  3. Inverte os pesos entre os parents.
-  4. Faz um shuffle da lista de ativos e redistribui os pesos para garantir que a soma dê 100%.
+  - Sorteia aleátoriamente um determinado numero de ativos.
+  - Sorteia aleátoriamente os ativos dentro da carteira.
+  - Inverte os pesos entre os parents.
+  - Faz um shuffle da lista de ativos e redistribui os pesos para garantir que a soma dê 100%.
 
 - <b>Mutação:</b> Para 10% da população é sorteado de forma aleátoria um numero entre -5% e 5%, esse valor 
 é subtraido (ou somado dependendo se o sorteio foi positivo ou negativo) de cada ativo. O excedente ou faltante é redistribuido de forma 
