@@ -10,7 +10,7 @@ rotas, alocação de recursos e design de redes neurais.
 Otimizar os pesos de uma carteira de investimentos com ativos nacionais e 
 internacionais. 
 A melhor carteira é aquela que tem o maior retorno ajustado ao risco, ou seja,
-o maior retorno com menos volatlidade (nesse caso estamos considerando que ricos é igual a volatilidade).
+o maior retorno com menos volatlidade (nesse caso estamos considerando que rico é igual a volatilidade).
 Foi utilizado o índice de SHARPE para mensurar esse indicador.
 
 Índice de Sharpe = (Retorno do Investimento - Taxa Livre de Risco) / Desvio Padrão de volatilidade
