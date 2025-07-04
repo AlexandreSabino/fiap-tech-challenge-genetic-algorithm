@@ -165,17 +165,6 @@ def select_by_tournament(population: List[AssetIndividual], k: int = 5) -> Asset
     winner = max(tournament_contenders, key=lambda individual: individual.fitness)
     return winner
 
-
-def check(individual: AssetIndividual):
-    for asset in individual.assets:
-        w = individual.assets[asset]
-        if w < MIN_PERCENTAGE or w > MAX_PERCENTAGE or math.isnan(w):
-            print("ACHEI w < MIN_PERCENTAGE or w > MAX_PERCENTAGE or math.isnan(w)")
-
-    if abs(1 - individual.total_weight()) > 0.0001:
-        print(" individual.total_weight() != 1")
-
-
 class PopulationGeneratorWithHotStart(PopulationGenerator):
 
     def initial(self, df) -> List[AssetIndividual]:
@@ -198,8 +187,5 @@ class PopulationGeneratorWithHotStart(PopulationGenerator):
 
             new_population.append(new_individual_1)
             new_population.append(new_individual_2)
-
-            check(new_individual_1)
-            check(new_individual_2)
 
         return new_population

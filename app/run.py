@@ -9,6 +9,7 @@ from app.genetic_algorithm_flow import GeneticAlgorithmFlow
 from app.population_generator import PopulationGeneratorWithHotStart
 from completion_checker import MAX_COUNTER
 from app.collect_prices import collect_prices
+from app.population_generator import POPULATION_SIZE
 
 st.set_page_config(layout="wide")
 st.title("Genetic Algorithm")
@@ -41,7 +42,7 @@ class EventStreamlit(Event):
                 fig_pie = px.pie(df_pie,
                                  names='Ativo',
                                  values='Percentual',
-                                 title=f"Composição na Geração {generation} - Best fitness: {best_individual.fitness:.5f}",
+                                 title=f"Composição na Geração {generation} - Best fitness: {best_individual.fitness:.5f} Carteiras analisadas: {generation*POPULATION_SIZE}",
                                  hole=0.3)
                 fig_pie.update_traces(textposition='inside', textinfo='percent+label')
                 st.plotly_chart(fig_pie, use_container_width=True, key=f"pie_chart_{generation}")
