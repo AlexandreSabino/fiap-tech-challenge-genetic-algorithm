@@ -154,8 +154,9 @@ def apply_mutation(individual: AssetIndividual):
         mutation_rate = random.uniform(-MUTATION_INTENSITY, MUTATION_INTENSITY)
         if mutation_rate != 0.0:
             for asset in individual.assets:
-                weight = individual.assets[asset] + mutation_rate
-                individual.assets[asset] = weight
+                if random.random() <= 0.5: #Aplica a mutação para 50% da carteira
+                    weight = individual.assets[asset] + mutation_rate
+                    individual.assets[asset] = weight
 
             individual.adjust_weights(MIN_PERCENTAGE, MAX_PERCENTAGE)
 

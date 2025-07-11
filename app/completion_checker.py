@@ -6,7 +6,7 @@ class CompletionChecker:
     def is_completed(self, counter: int, best_fitness: float) -> bool:
         pass
 
-MAX_COUNTER = 200
+MAX_COUNTER = 300
 
 class CompletionCheckerCounter(CompletionChecker):
 
