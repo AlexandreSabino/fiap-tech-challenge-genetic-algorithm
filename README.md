@@ -55,7 +55,7 @@ Também é adicionado na lista o melhor indíviduo da geração anterior (elitis
   - Faz um shuffle da lista de ativos e redistribui os pesos para garantir que a soma dê 100%.
 
 - <b>Mutação:</b> Para 10% da população é sorteado de forma aleátoria um numero entre -5% e 5%, esse valor 
-é subtraido (ou somado dependendo se o sorteio foi positivo ou negativo) de cada ativo. O excedente ou faltante é redistribuido de forma 
+é subtraido (ou somado dependendo se o sorteio foi positivo ou negativo) de 50% dos ativos da carteira. O excedente ou faltante é redistribuido de forma 
 aleátoria no final.
 
 Para visualização dos dados foi utilizado a biblioteca streamlit.
